@@ -1,0 +1,61 @@
+---
+version: 1
+kind: component
+meta:
+  name: metrics-service
+  brief: Metrics Service
+  source:
+    dir: ../api
+
+requires:
+- kubernetes
+
+lifecycle:
+  verbs:
+  - deploy
+  - undeploy
+  - kubernetes
+
+parameters:
+- name: component.docker.auth.host
+- name: component.ingress.protocol
+- name: component.metrics-service
+  parameters:
+  - name: metricsApiSecret
+    kind: user
+  - name: name
+    value: metrics-service
+  - name: namespace
+    value: automation-hub
+    env: NAMESPACE
+  - name: image
+    env: IMAGE
+- name: dns.domain
+  brief: DNS domain
+  env: DOMAIN_NAME
+- name: component.postgresql
+  parameters:
+  - name: host
+  - name: port
+  - name: user
+  - name: database
+  - name: password
+  - name: schema
+    value: metrics_service
+- name: cloud.region
+  kind: user
+  env: AWS_DEFAULT_REGION
+- name: terraform.bucket
+  parameters:
+  - name: name
+  - name: region
+
+templates:
+  files:
+  - '*.template'
+  - templates/*.template
+
+outputs:
+- name: component.metrics-service.endpoint
+  brief: Metrics Service API endpoint
+  value: http://${component.metrics-service.name}.${component.metrics-service.namespace}.svc.cluster.local/api/v1

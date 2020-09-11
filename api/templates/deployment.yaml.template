@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${component.metrics-service.name}
+  namespace: ${component.metrics-service.namespace}
+  labels:
+    provider: agilestacks.com
+    project: metrics-service
+    qualifier: api
+spec:
+  selector:
+    matchLabels:
+        provider: agilestacks.com
+        project: metrics-service
+        qualifier: api
+  replicas: 1
+  template:
+    metadata:
+      name: ${component.metrics-service.name}
+      namespace: ${component.metrics-service.namespace}
+      labels:
+        provider: agilestacks.com
+        project: metrics-service
+        qualifier: api
+    spec:
+      containers:
+      - name: api
+        image: ${component.metrics-service.image}
+        imagePullPolicy: Always
+        env:
+        - name: METRICS_PORT
+          value: '3001'
+        - name: METRICS_LOG_LEVEL
+          value: debug
+        - name: METRICS_API_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: ${component.metrics-service.name}-secrets
+              key:  metrics-api-secret
+        - name: POSTGRESQL_HOST
+          value: "${component.postgresql.host}"
+        - name: POSTGRESQL_PORT
+          value: "${component.postgresql.port}"
+        - name: POSTGRESQL_USER
+          value: "${component.postgresql.user}"
+        - name: POSTGRESQL_DB
+          value: "${component.postgresql.database}"
+        - name: POSTGRESQL_SCHEMA
+          value: "${component.postgresql.schema}"
+        - name: POSTGRESQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ${component.metrics-service.name}-secrets
+              key: postgresql-password
+        ports:
+        - name: http
+          containerPort: 3001
+        readinessProbe:
+          httpGet:
+            path: /api/v1/ping
+            port: 3001
+        livenessProbe:
+          httpGet:
+            path: /api/v1/ping
+            port: 3001
+          initialDelaySeconds: 60
+          timeoutSeconds: 3

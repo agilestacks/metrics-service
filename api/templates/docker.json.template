@@ -1,0 +1,7 @@
+{
+	"auths": {
+	},
+	"credHelpers": {
+		"${component.docker.auth.host}": "ecr-login"
+	}
+}

@@ -1,0 +1,12 @@
+{
+  "user": "${component.postgresql.user}",
+  "password": "${component.postgresql.password}",
+  "host": "${component.postgresql.host}",
+  "port": "${component.postgresql.port}",
+  "database": "${component.postgresql.database}",
+  "schema": "${component.postgresql.schema}",
+  "create-schema": true,
+  "migrations-table": "migrations",
+  "ignore-pattern": ".*\\.json"
+}
+
