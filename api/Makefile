@@ -9,6 +9,10 @@ IMAGE         ?= $(REGISTRY)/agilestacks/$(DOMAIN_NAME)/metrics-service
 IMAGE_VERSION ?= $(shell git rev-parse HEAD | colrm 7)
 NAMESPACE     ?= automation-hub
 
+TEST_DATABASE_URL    := postgres://hub:hubsecretpass@localhost:5432/hubdb
+TEST_DATABASE_SCHEMA := metrics_service
+export METRICS_API_SECRET := qwerty
+
 kubectl ?= kubectl --context="$(DOMAIN_NAME)" --namespace="$(NAMESPACE)"
 
 build:
@@ -55,9 +59,30 @@ lint:
 .PHONY: lint
 
 test:
-	@npm test
+	@DATABASE_URL=$(TEST_DATABASE_URL) POSTGRESQL_SCHEMA=$(TEST_DATABASE_SCHEMA) npm test
 .PHONY: test
 
 skaffold-dev:
 	skaffold dev --kube-context $(DOMAIN_NAME) --port-forward --cleanup=false
 .PHONY: skaffold-dev
+
+run:
+	@DATABASE_URL=$(TEST_DATABASE_URL) POSTGRESQL_SCHEMA=$(TEST_DATABASE_SCHEMA) npm start
+.PHONY: run
+
+run-postgresql:
+	@docker run -ti --rm  --name postgres \
+		-e POSTGRES_PASSWORD=hubsecretpass \
+		-e POSTGRES_USER=hub \
+		-e POSTGRES_DB=hubdb \
+		-p 127.0.0.1:5432:5432 \
+		postgres:11
+.PHONY: run-postgresql
+
+migrate:
+	@DATABASE_URL=$(TEST_DATABASE_URL) npm run migrate -- up
+.PHONY: migrate
+
+migrate-down:
+	@DATABASE_URL=$(TEST_DATABASE_URL) npm run migrate -- down
+.PHONY: migrate

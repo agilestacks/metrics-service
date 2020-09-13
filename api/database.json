@@ -1,0 +1,4 @@
+{
+    "create-schema": true,
+    "schema": "metrics_service"
+}

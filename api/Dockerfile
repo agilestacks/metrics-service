@@ -16,7 +16,7 @@ RUN npm -q ci --only=prod
 RUN if [ "$NODE_LAUNCHER" = "nodemon" ] ; then npm -q i nodemon ; fi
 COPY server.js /app/
 COPY migrations/ /app/migrations/
-COPY database.json /app/
+COPY templates/database.json /app/
 COPY src/ /app/src/
 
 EXPOSE 3001

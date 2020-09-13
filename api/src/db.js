@@ -1,4 +1,5 @@
 const {
+    DATABASE_URL: url,
     POSTGRESQL_HOST: host,
     POSTGRESQL_PORT: port,
     POSTGRESQL_DB: database,
@@ -9,6 +10,6 @@ const {
 
 const pgp = require('pg-promise')({schema});
 
-const db = pgp({host, port, database, user, password});
+const db = pgp(url || {host, port, database, user, password});
 
 module.exports = {db};

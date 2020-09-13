@@ -10,6 +10,7 @@ const {loggerFactory} = require('./logger');
 const {ApiError, ErrorWrapper, ForbiddenError, trimAxiosVerbosity} = require('./errors');
 const {db} = require('./db');
 
+const versionController = require('./controllers/version');
 const seriesController = require('./controllers/series');
 
 const app = new Koa();
@@ -83,6 +84,7 @@ pingRouter.use(async (ctx, next) => {
 pingRouter.get('/ping', (ctx) => {
     ctx.body = 'pong';
 });
+pingRouter.get('/version', versionController.get);
 
 publicRouter.post('/series', seriesController.post);
 

@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "lint": "eslint server.js src/",
+    "lint": "eslint server.js src/ test/",
     "jest": "jest",
-    "test": "npm run lint && npm run jest",
+    "test": "npm run jest",
     "migrate": "node-pg-migrate --config-file database.json -j js",
     "migrate-create": "node-pg-migrate create",
     "debug": "node --inspect server.js",
