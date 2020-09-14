@@ -46,7 +46,7 @@ describe('basic routing', () => {
 
 const testMetrics = [
     {
-        name: 'm1',
+        metric: 'm1',
         kind: 'count',
         unit: 'bytes',
         value: 1,
@@ -54,7 +54,7 @@ const testMetrics = [
         timestamp: '2020-09-09 20:20:09.555'
     },
     {
-        name: 'm1',
+        metric: 'm1',
         kind: 'count',
         unit: 'bytes',
         value: 2,
@@ -62,21 +62,21 @@ const testMetrics = [
         timestamp: '2020-09-09 20:20:19.555'
     },
     {
-        name: 'm2',
+        metric: 'm2',
         kind: 'gauge',
         value: 3,
         tags: {host: 'zzz'},
         timestamp: '2020-09-09 20:20:29.555'
     },
     {
-        name: 'm2',
+        metric: 'm2',
         kind: 'gauge',
         value: 4,
         tags: {host: 'zzz'},
         timestamp: '2020-09-09 20:20:39.555'
     },
     {
-        name: 'm2',
+        metric: 'm2',
         kind: 'gauge',
         value: 5,
         tags: {host: 'zzz'},
