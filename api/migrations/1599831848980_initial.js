@@ -5,7 +5,7 @@ exports.up = (pgm) => {
         name: { type: 'string', notNull: true },
         kind: { type: 'string', notNull: true },
         unit: { type: 'string', notNull: false },
-        timestamp: { type: 'timestamp', notNull: true, default: pgm.func('current_timestamp') }
+        ts: { type: 'timestamp', notNull: true, default: pgm.func('current_timestamp') }
     }, {
         constraints: {
             'metrics_uk': { unique: ['organization', 'name', 'kind']}
@@ -18,7 +18,7 @@ exports.up = (pgm) => {
         metric_id: { type: 'integer', notNull: true, references: 'metrics' },
         value: { type: 'real', notNull: true },
         tags: { type: 'jsonb', notNull: false},
-        timestamp: { type: 'timestamp', notNull: true, default: pgm.func('current_timestamp') }
+        ts: { type: 'timestamp', notNull: true, default: pgm.func('current_timestamp') }
     });
 
     pgm.createIndex('series', [{ name: 'tags', opclass: { name: 'jsonb_path_ops' }}], {method: 'gin'});
