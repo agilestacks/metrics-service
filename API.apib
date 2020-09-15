@@ -1,0 +1,72 @@
+FORMAT: 1A
+HOST: http://metrics.agilestacks.com/api/v1
+
+# Metrics Service API
+
+Metrics Service provides HTTP API to submit timeseries metrics.
+
+## Series [/series]
+
+A series entry is:
+
+- metric name, like `hubcli.commands.usage`;
+- metric kind: `count`, `gauge`, etc.;
+- tags as array of {key : value} pairs, ie. `[{command: deploy}, {host: <uuid>}]`;
+- metric value: any number, saved as PostgreSQL [`real`](https://www.postgresql.org/docs/11/datatype-numeric.html#DATATYPE-FLOAT) 32-bit float datatype
+- optionally, unit of measure: `byte`, `percent`, etc.
+
+Metrics are created on the fly as new series are submitted.
+A metric is an unique combination of `name`, `kind`, and also (internally) `organization` the metric belongs to - for multi-tenancy.
+
+### Post metrics [POST /series]
+
+Method input is an array of objects.
+Currently 404 is returned if `X-API-Secret` is not valid.
+
++ Request (application/json)
+
+    + Headers
+
+            X-API-Secret: pre-shared-key
+
+    + Body
+
+            [{
+                "metric": "hubcli.commands.usage",
+                "kind": "count",
+                "tags": [{"command": "deploy"}, {"host": "<uuid>"}],
+                "value": 1
+            }]
+
++ Response 202 (application/json; charset=utf-8)
+
+    + Body
+
+            {
+                "status": "ok"
+            }
+
++ Response 403
+
++ Response 404
+
++ Response 400 (application/json; charset=utf-8)
+
+            "errors": [
+                    {
+                        "type": "badRequest",
+                        "detail": "Error parse JSON input",
+                        "meta": {
+                            "errors": {
+                                "type": "badRequest",
+                                "detail": "Error parse JSON input",
+                                "meta": {
+                                    "stack":"Error: Error parse JSON input...js:76:19)"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+
++ Response 500
