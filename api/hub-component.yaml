@@ -59,3 +59,6 @@ outputs:
 - name: component.metrics-service.endpoint
   brief: Metrics Service API endpoint
   value: http://${component.metrics-service.name}.${component.metrics-service.namespace}.svc.cluster.local/api/v1
+- name: component.metrics-service.postgresql.schema
+  brief: Metrics Service PostgreSQL database schema
+  value: ${component.postgresql.schema}
