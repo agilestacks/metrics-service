@@ -39,7 +39,8 @@ async function metricRef(db, org, entry) {
 
 async function insert(db, org, series) {
     const refs = await Promise.all(series.map(entry => metricRef(db, org, entry)));
-    await db.tx('insert', tx => Promise.all(map(series, ({value, tags, timestamp = 'now'}, i) => tx.none(
+    const defaultTs = Math.floor(Date.now() / 1000);
+    await db.tx('insert', tx => Promise.all(map(series, ({value, tags, timestamp = defaultTs}, i) => tx.none(
         `insert into series (metric_id, value, tags, ts)
             values ($1, $2, $3, ${typeof timestamp == 'number' ? 'to_timestamp($4)' : '$4'})`,
         [refs[i], value, tags, timestamp])))
