@@ -4,10 +4,9 @@ metadata:
   name: ${component.metrics-service.name}
   namespace: ${component.metrics-service.namespace}
   labels:
-    provider: agilestacks.com
-    project: metrics-service
-    kubernetes.io/name: metrics-service
-    kubernetes.io/cluster-service: "true"
+    app.kubernetes.io/name: metrics-service
+    app.kubernetes.io/instance: ${component.metrics-service.name}
+    app.kubernetes.io/component: api
 spec:
   ports:
   - name: http
